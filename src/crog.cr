@@ -1,7 +1,6 @@
 # TODO: Write documentation for `Crog`
 
 require "http/client"
-require "uri"
 require "xml"
 
 
@@ -28,13 +27,10 @@ module Crog
 
     class Parse
         def initialize(@url : String)
-            # uri = URI.parse(@url)
             res = HTTP::Client.get(url)
             mdata = MetaObj.new()
 
             HTTP::Client.get(url) do |res_io|
-                # pp res_io.body_io.gets
-                # pp "......................."
                 res_io.status_code  # => 200
                 document = XML.parse_html(res_io.body_io)
 
@@ -48,9 +44,6 @@ module Crog
                 mdata.logo          = document.xpath_node("//meta[@property='og:title']").try &.["content"].to_s
                 mdata.tags          = get_tags(document)
             end
-
-            pp mdata
-
         end
 
         def get_image(node : XML::Node)
