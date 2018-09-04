@@ -8,10 +8,8 @@ require "xml"
 module Crog
     VERSION = "0.1.0"
 
-
-
     # page = Parse.new("https://medium.com/welldone-software/an-overview-of-javascript-testing-in-2018-f68950900bc3")
-    page = Parse.new("https://raw.githubusercontent.com/niallkennedy/open-graph-protocol-examples/master/article.html")
+    # page = Parse.new("https://raw.githubusercontent.com/niallkennedy/open-graph-protocol-examples/master/article.html")
 
     class MetaObj
        
