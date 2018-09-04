@@ -23,7 +23,24 @@ dependencies:
 require "crog"
 ```
 
-TODO: Write usage instructions here
+To use the library, simple call the Parse method as;
+````
+mdata = Crog::Parse.new(url)
+````
+the variable here will hold an object with attributes;
+````
+            property image :        String | Nil = nil
+            property image_width :  Int32 | Nil = nil
+            property image_height : Int32 | Nil = nil
+            property url :          String | Nil = nil
+            property description :  String | Nil = nil
+            property title :        String | Nil = nil
+            property author :       String | Nil = nil
+            property date :         String | Nil = nil
+            property logo :         String | Nil = nil
+            property tags         = [] of String
+````
+
 
 ## Development
 
