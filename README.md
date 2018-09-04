@@ -1,6 +1,11 @@
 # crog
 
-TODO: Write a description here
+Crog is a simple Crystal library to parse up the Open Graph meta data for web pages.
+If you have ever wondered how does sites like Reddit, Facebook etc fetch the relevant images and other 
+metadata from 3rd party sites, this is it.
+
+Special thanks to https://metascraper.js.org/
+whose rules i referenced throughout my development.
 
 ## Installation
 
@@ -9,7 +14,7 @@ Add this to your application's `shard.yml`:
 ```yaml
 dependencies:
   crog:
-    github: your-github-user/crog
+    github: rishavs/crog
 ```
 
 ## Usage
@@ -22,7 +27,7 @@ TODO: Write usage instructions here
 
 ## Development
 
-TODO: Write development instructions here
+A lot of edge cases are not yet picked up. I have left them in the crog.cr file for future reference.
 
 ## Contributing
 
@@ -34,4 +39,4 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [your-github-user](https://github.com/your-github-user) your-name-here - creator, maintainer
+- [Rishav](https://github.com/rishavs) Rishav Sharan - creator, maintainer
