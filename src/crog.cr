@@ -9,40 +9,36 @@ module Crog
 
     # page = Parse.new("https://medium.com/welldone-software/an-overview-of-javascript-testing-in-2018-f68950900bc3")
     # page = Parse.new("https://raw.githubusercontent.com/niallkennedy/open-graph-protocol-examples/master/article.html")
-
-    class MetaObj
-       
-            property image :        String | Nil = nil
-            property image_width :  Int32 | Nil = nil
-            property image_height : Int32 | Nil = nil
-            property url :          String | Nil = nil
-            property description :  String | Nil = nil
-            property title :        String | Nil = nil
-            property author :       String | Nil = nil
-            property date :         String | Nil = nil
-            property logo :         String | Nil = nil
-            property tags         = [] of String
-
-    end
+    # pp page
 
     class Parse
-        def initialize(@url : String)
-            res = HTTP::Client.get(url)
-            mdata = MetaObj.new()
 
-            HTTP::Client.get(url) do |res_io|
+        property image :        String | Nil = nil
+        property image_width :  Int32 | Nil = nil
+        property image_height : Int32 | Nil = nil
+        property url :          String | Nil = nil
+        property description :  String | Nil = nil
+        property title :        String | Nil = nil
+        property author :       String | Nil = nil
+        property date :         String | Nil = nil
+        property logo :         String | Nil = nil
+        property tags         = [] of String
+
+        def initialize(@site : String)
+    
+            HTTP::Client.get(site) do |res_io|
                 res_io.status_code  # => 200
                 document = XML.parse_html(res_io.body_io)
 
-                mdata.image         = get_image(document)
-                mdata.image_height  = document.xpath_node("//meta[@property='og:image:height']").try &.["content"].to_i
-                mdata.image_width   = document.xpath_node("//meta[@property='og:image:width']").try &.["content"].to_i
-                mdata.url           = get_url(document)
-                mdata.description   = document.xpath_node("//meta[@property='og:description']").try &.["content"].to_s
-                mdata.title         = document.xpath_node("//meta[@property='og:title']").try &.["content"].to_s
-                mdata.date          = document.xpath_node("//meta[@property='og:title']").try &.["content"].to_s
-                mdata.logo          = document.xpath_node("//meta[@property='og:title']").try &.["content"].to_s
-                mdata.tags          = get_tags(document)
+                @image         = get_image(document)
+                @image_height  = document.xpath_node("//meta[@property='og:image:height']").try &.["content"].to_i
+                @image_width   = document.xpath_node("//meta[@property='og:image:width']").try &.["content"].to_i
+                @url           = get_url(document)
+                @description   = get_description(document)
+                @title         = get_title(document)
+                @date          = get_date(document)
+                @logo          = get_logo(document)
+                @tags          = get_tags(document)
             end
         end
 
@@ -54,7 +50,6 @@ module Crog
                 node.xpath_node("//meta[@name='twitter:image']").try &.["content"].to_s
                 node.xpath_node("//meta[@itemprop='image']").try &.["content"].to_s
 
-
             # wrap($ => $filter($, $('article img[src]'), getSrc)),
             # wrap($ => $filter($, $('#content img[src]'), getSrc)),
             # wrap($ => $('img[alt*="author"]').attr('src')),
@@ -63,11 +58,11 @@ module Crog
         end
 
         def get_url(node : XML::Node)
-            murl = node.xpath_node("//meta[@property='og:url']").try &.["content"].to_s ||
+            url = node.xpath_node("//meta[@property='og:url']").try &.["content"].to_s ||
                 node.xpath_node("//meta[@name='twitter:url']").try &.["content"].to_s ||
-                @url
+                @site
 
-            murl
+            url
             # wrap($ => $('meta[property="og:url"]').attr('content')),
             # wrap($ => $('meta[name="twitter:url"]').attr('content')),
             # wrap($ => $('link[rel="canonical"]').attr('href')),
@@ -142,7 +137,6 @@ module Crog
                 node.xpath_node("//meta[@name='date']").try &.["content"].to_s
 
             date
-
   
             # wrap($ => $('[itemprop="datePublished"]').attr('content')),
             # wrap($ => $('time[itemprop*="pubdate"]').attr('datetime')),
@@ -171,12 +165,9 @@ module Crog
             tags = [] of String
             node.xpath_nodes("//meta[@property='article:tag']").try &.each do |tag|
                 tags << tag.try &.["content"].to_s
-            
             end
 
-
             tags
-
         end
     end
 end
