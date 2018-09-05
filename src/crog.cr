@@ -47,8 +47,9 @@ module Crog
                 node.xpath_node("//meta[@property='og:image:url']").try &.["content"].to_s || 
                 node.xpath_node("//meta[@property='og:image']").try &.["content"].to_s || 
                 node.xpath_node("//meta[@name='twitter:image:src']").try &.["content"].to_s || 
-                node.xpath_node("//meta[@name='twitter:image']").try &.["content"].to_s
-                node.xpath_node("//meta[@itemprop='image']").try &.["content"].to_s
+                node.xpath_node("//meta[@name='twitter:image']").try &.["content"].to_s ||
+                node.xpath_node("//meta[@itemprop='image']").try &.["content"].to_s ||
+                node.xpath_node("//img[@src]").try &.["src"].to_s 
 
             # wrap($ => $filter($, $('article img[src]'), getSrc)),
             # wrap($ => $filter($, $('#content img[src]'), getSrc)),
